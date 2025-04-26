@@ -29,7 +29,7 @@
 <script>
   async function fetchServerInfo() {
     try {
-      const response = await fetch('https://api.gamemonitoring.net/servers/8709801');
+      const response = await fetch('https://api.gamemonitoring.net/servers/put_your_gamemonitoring_server_id_here');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -49,7 +49,7 @@
         <div class="info-item"><span class="label">Last Offline:</span> ${new Date(server.last_offline * 1000).toLocaleString()}</div>
         <div class="info-item"><span class="label">Last Online:</span> ${new Date(server.last_online * 1000).toLocaleString()}</div>
         <div class="info-item"><span class="label">Last Update:</span> ${new Date(server.last_update * 1000).toLocaleString()}</div>
-        <div class="info-item"><span class="label">Details:</span> <a href="https://gamemonitoring.net/arma-reforger/servers/8709801" target="_blank">View on GameMonitoring</a></div>
+        <div class="info-item"><span class="label">Details:</span> <a href="https://gamemonitoring.net/arma-reforger/servers/put_your_gamemonitoring_server_id_here" target="_blank">View on GameMonitoring</a></div>
       `;
 
       document.getElementById('serverDetails').innerHTML = serverDetails;
