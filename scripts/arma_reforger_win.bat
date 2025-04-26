@@ -92,7 +92,7 @@ if exist "%WORKSPACE%\config.json" (
     echo 		"whitelist": []
     echo 	},
     echo 	"game": {
-    echo 		"name":"Wil3on MCS Server",
+    echo 		"name":"Wil3on MCS Server Win",
     echo 		"password": "",
     echo 		"passwordAdmin": "MyPass",
     echo 		"admins" : [
