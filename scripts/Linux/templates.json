@@ -11,26 +11,26 @@
     }
   ],
   "packages": [
-    {
-      "language": "en_us",
-      "description": "Arma Reforger Windows Server with SteamCMD and installation .bat script.",
-      "title": "Arma Reforger Windows Server",
-      "runtime": "Windows",
-      "hardware": "RAM 8G+",
-      "size": "10GB+",
-      "remark": "Arma Reforger server using SteamCMD",
-      "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/arma_reforger_win.bat",
-      "author": "Bohemia Interactive & Wil3on",
-      "setupInfo": {
-        "type": "steam/universal",
-        "processType": "general",
-        "startCommand": "ArmaReforgerServer.exe -config .\\config.json -profile .\\profile -maxFPS 100 -freezeCheck 25 -freezeCheckMode kill -autoreload 30 -logStats 60000 -AILimit 120 -logFS -addonsVerify -addonsRepair -backendlog -nothrow",
-        "stopCommand": "^c",
-        "updateCommand": "cmd /c \"{mcsm_workspace}\\arma_reforger_win.bat\"",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
+      {
+        "language": "en_us",
+        "description": "Arma Reforger Linux Server with SteamCMD and installation shell script.",
+        "title": "Arma Reforger Linux Server",
+        "runtime": "Linux",
+        "hardware": "RAM 8G+",
+        "size": "10GB+",
+        "remark": "Arma Reforger server using SteamCMD",
+        "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/Linux/arma_reforger_linux.sh",
+        "author": "Bohemia Interactive & Wil3on",
+        "setupInfo": {
+          "type": "steam/universal",
+          "processType": "general",
+          "startCommand": "./ArmaReforgerServer -config ./config.json -profile ./profile -maxFPS 100 -freezeCheck 25 -freezeCheckMode kill -autoreload 30 -logStats 60000 -AILimit 120 -logFS -addonsVerify -addonsRepair -backendlog -nothrow",
+          "stopCommand": "^c",
+          "updateCommand": "bash \"{mcsm_workspace}/arma_reforger_linux.sh\"",
+          "ie": "utf-8",
+          "oe": "utf-8"
+        }
+      },
     {
       "language": "en_us",
       "description": "[Purpur] Minecraft 1.21.4 Purpur",
