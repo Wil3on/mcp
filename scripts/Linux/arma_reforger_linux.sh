@@ -94,7 +94,7 @@ else
 		"whitelist": []
 	},
 	"game": {
-		"name":"Wil3on MCS Server",
+		"name":"Wil3on MCS Server Linux",
 		"password": "",
 		"passwordAdmin": "MyPass",
 		"admins" : [
