@@ -1,0 +1,15 @@
+{
+  "name": "Wil3on Arma Reforger Monitor",
+  "version": "1.0.0",
+  "description": "Monitor Arma Reforger stats data from log files and expose via API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "fs-extra": "^11.2.0",
+    "moment": "^2.29.4"
+  }
+}

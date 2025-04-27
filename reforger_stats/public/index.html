@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0px;
+            /* background-color: #1e1e1e; */
+            /* color: #e0e0e0; */
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            /* background-color: #2d2d2d; */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #61dafb;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .fps-display, .players-display, .uptime-display {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .metric {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #3a3a3a3b;
+            /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); */
+            width: 30%;
+        }
+        .metric h2 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #a0a0a0;
+        }
+        .metric .value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #4fc3f7;
+            margin: 10px 0;
+        }
+        .metric.latest .value {
+            color: #4caf50;
+        }
+        .metric.average .value {
+            color: #ff9800;
+        }
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+            background-color: #33333326;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .last-updated {
+            text-align: center;
+            color: #a0a0a0;
+            font-style: italic;
+            margin-top: 6px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+        
+        /* Tab styles */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background-color: #44444445;
+            border: none;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 5px;
+            color: #a0a0a0;
+        }
+        .tab-button:hover {
+            /* background-color: #555555; */
+        }
+        .tab-button.active {
+            /* background-color: #2196f3; */
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 15px;
+            border-top: 2px solid #2196f3;
+            /* background-color: #2d2d2d; */
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Time period selector */
+        .time-controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            /* background-color: #3a3a3a; */
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .time-controls button {
+            margin: 0 5px;
+            padding: 8px 12px;
+            background-color: #44444438;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #a0a0a0;
+        }
+        .time-controls button:hover {
+            /* background-color: #55555529; */
+        }
+        .time-controls button.active {
+            background-color: #ffffff24;
+            color: white;
+        }
+        .min-max-display {
+            display: none;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #a0a0a0;
+        }
+        
+        /* Uptime styles */
+        .uptime-details {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #3a3a3a42;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .uptime-details h3 {
+            margin-top: 0;
+            color: #61dafb;
+        }
+        .uptime-details p {
+            margin: 5px 0;
+            color: #e0e0e0;
+        }
+        .uptime-details .uptime-string {
+            font-weight: bold;
+            font-size: 18px;
+            color: #4caf50;
+            margin: 15px 0;
+        }
+        .uptime-display .metric .unit {
+            font-size: 14px;
+            color: #a0a0a0;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">        
+        <div class="tabs">
+            <button class="tab-button active" data-tab="fps-tab">Server FPS</button>
+            <button class="tab-button" data-tab="players-tab">Players</button>
+            <button class="tab-button" data-tab="uptime-tab">Uptime</button>
+        </div>
+        
+        <!-- FPS Tab Content -->
+        <div id="fps-tab" class="tab-content active">
+            <div class="fps-display">
+                <div class="metric latest">
+                    <h2>Latest FPS</h2>
+                    <div id="latest-fps" class="value">--</div>
+                </div>
+                
+                <div class="metric average">
+                    <h2>Average FPS</h2>
+                    <div id="average-fps" class="value">--</div>
+                </div>
+                
+                <div class="metric">
+                    <h2>Status</h2>
+                    <div id="fps-status" class="value">--</div>
+                </div>
+            </div>
+            
+            <div class="time-controls" id="fps-time-controls">
+                <button class="time-button active" data-timeframe="raw">Live</button>
+                <button class="time-button" data-timeframe="hourly">Hourly</button>
+                <button class="time-button" data-timeframe="daily">Daily</button>
+                <button class="time-button" data-timeframe="weekly">Weekly</button>
+                <button class="time-button" data-timeframe="monthly">Monthly</button>
+            </div>
+            
+            <div id="fps-min-max" class="min-max-display">
+                Min: <span id="fps-min">--</span> | Max: <span id="fps-max">--</span>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="fps-chart"></canvas>
+            </div>
+            
+            <div id="fps-last-updated" class="last-updated">Last updated: -- (Auto Update: <span id="refresh-rate-fps">5</span>s)</div>
+        </div>
+        
+        <!-- Players Tab Content -->
+        <div id="players-tab" class="tab-content">
+            <div class="players-display">
+                <div class="metric latest">
+                    <h2>Current Players</h2>
+                    <div id="latest-players" class="value">--</div>
+                </div>
+                
+                <div class="metric average">
+                    <h2>Average Players</h2>
+                    <div id="average-players" class="value">--</div>
+                </div>
+                
+                <div class="metric">
+                    <h2>Status</h2>
+                    <div id="players-status" class="value">--</div>
+                </div>
+            </div>
+            
+            <div class="time-controls" id="players-time-controls">
+                <button class="time-button active" data-timeframe="raw">Live</button>
+                <button class="time-button" data-timeframe="hourly">Hourly</button>
+                <button class="time-button" data-timeframe="daily">Daily</button>
+                <button class="time-button" data-timeframe="weekly">Weekly</button>
+                <button class="time-button" data-timeframe="monthly">Monthly</button>
+            </div>
+            
+            <div id="players-min-max" class="min-max-display">
+                Min: <span id="players-min">--</span> | Max: <span id="players-max">--</span>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="players-chart"></canvas>
+            </div>
+            
+            <div id="players-last-updated" class="last-updated">Last updated: -- (Auto Update: <span id="refresh-rate-players">5</span>s)</div>
+        </div>
+        
+        <!-- Uptime Tab Content -->
+        <div id="uptime-tab" class="tab-content">
+            <div class="uptime-display">
+                <div class="metric">
+                    <h2>Days</h2>
+                    <div id="uptime-days" class="value">--</div>
+                    <span class="unit">days</span>
+                </div>
+                
+                <div class="metric">
+                    <h2>Hours</h2>
+                    <div id="uptime-hours" class="value">--</div>
+                    <span class="unit">hours</span>
+                </div>
+                
+                <div class="metric">
+                    <h2>Minutes</h2>
+                    <div id="uptime-minutes" class="value">--</div>
+                    <span class="unit">minutes</span>
+                </div>
+            </div>
+            
+            <div class="uptime-details">
+                <h3>Server Status</h3>
+                <div id="uptime-string" class="uptime-string">Calculating uptime...</div>
+                
+                <p><strong>Start Time:</strong> <span id="uptime-start-time">--</span></p>
+                <p><strong>Current Time:</strong> <span id="uptime-current-time">--</span></p>
+                <p><strong>Status:</strong> <span id="uptime-status">--</span></p>
+            </div>
+            
+            <div id="uptime-last-updated" class="last-updated">Last updated: -- (Auto Update: <span id="refresh-rate-uptime">5</span>s)</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Configuration
+        const refreshInterval = 5000; // 5 seconds, should match server config
+        
+        // State variables
+        let fpsTimeframe = 'raw';
+        let playersTimeframe = 'raw';
+        
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update active tab content
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Time period control functionality
+        const fpsTimeButtons = document.querySelectorAll('#fps-time-controls .time-button');
+        const playersTimeButtons = document.querySelectorAll('#players-time-controls .time-button');
+        
+        fpsTimeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                fpsTimeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                fpsTimeframe = button.getAttribute('data-timeframe');
+                
+                // Show/hide min-max display for aggregated data
+                document.getElementById('fps-min-max').style.display = 
+                    fpsTimeframe !== 'raw' ? 'block' : 'none';
+                
+                // Fetch new data with the selected timeframe
+                fetchFpsData();
+            });
+        });
+        
+        playersTimeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                playersTimeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                playersTimeframe = button.getAttribute('data-timeframe');
+                
+                // Show/hide min-max display for aggregated data
+                document.getElementById('players-min-max').style.display = 
+                    playersTimeframe !== 'raw' ? 'block' : 'none';
+                
+                // Fetch new data with the selected timeframe
+                fetchPlayersData();
+            });
+        });
+
+        // Initialize FPS chart
+        const fpsCtx = document.getElementById('fps-chart').getContext('2d');
+        const fpsChart = new Chart(fpsCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'FPS Values',
+                    data: [],
+                    borderColor: '#4fc3f7',
+                    backgroundColor: 'rgba(79, 195, 247, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'FPS',
+                            color: '#e0e0e0'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#a0a0a0'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            color: '#e0e0e0'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#a0a0a0'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#e0e0e0'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(1);
+                                }
+                                return label;
+                            }
+                        },
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1
+                    }
+                }
+            }
+        });
+        
+        // Initialize Players chart
+        const playersCtx = document.getElementById('players-chart').getContext('2d');
+        const playersChart = new Chart(playersCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Player Count',
+                    data: [],
+                    borderColor: '#4caf50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: true,
+                    stepped: true // Using stepped line for player count
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true, // Players count should start at 0
+                        title: {
+                            display: true,
+                            text: 'Players',
+                            color: '#e0e0e0'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            precision: 0, // Only show whole numbers
+                            stepSize: 1,  // Step by 1
+                            color: '#a0a0a0'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            color: '#e0e0e0'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#a0a0a0'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#e0e0e0'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(0);
+                                }
+                                return label;
+                            }
+                        },
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1
+                    }
+                }
+            }
+        });
+
+        // Helper function to update FPS status
+        function getStatusFromFPS(fps) {
+            if (!fps) return { text: 'No Data', color: '#6c757d' };
+            if (fps >= 60) return { text: 'Excellent', color: '#28a745' };
+            if (fps >= 30) return { text: 'Good', color: '#17a2b8' };
+            return { text: 'Poor', color: '#dc3545' };
+        }
+        
+        // Helper function to update Players status
+        function getStatusFromPlayerCount(count) {
+            if (!count && count !== 0) return { text: 'No Data', color: '#6c757d' };
+            if (count === 0) return { text: 'Empty', color: '#dc3545' };
+            if (count < 5) return { text: 'Low', color: '#fd7e14' };
+            if (count < 10) return { text: 'Medium', color: '#17a2b8' };
+            return { text: 'High', color: '#28a745' };
+        }
+
+        // Update the FPS dashboard with received data
+        function updateFpsDashboard(data) {
+            // Update metrics
+            document.getElementById('latest-fps').textContent = data.latestFPS ? data.latestFPS.toFixed(1) : '--';
+            document.getElementById('average-fps').textContent = data.averageFPS || '--';
+            
+            // Update status
+            const status = getStatusFromFPS(data.latestFPS);
+            const statusElement = document.getElementById('fps-status');
+            statusElement.textContent = status.text;
+            statusElement.style.color = status.color;
+            
+            // Update chart datasets
+            if (fpsTimeframe !== 'raw' && data.minValues && data.maxValues) {
+                // Multiple datasets for aggregated data
+                fpsChart.data.labels = data.labels;
+                
+                // Clear existing datasets
+                fpsChart.data.datasets = [];
+                
+                // Add average dataset
+                fpsChart.data.datasets.push({
+                    label: 'Average FPS',
+                    data: data.values,
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: false
+                });
+                
+                // Add min-max range using area chart
+                fpsChart.data.datasets.push({
+                    label: 'FPS Range',
+                    data: data.minValues,
+                    borderColor: 'rgba(0, 123, 255, 0.2)',
+                    backgroundColor: 'rgba(0, 123, 255, 0.05)',
+                    borderWidth: 1,
+                    tension: 0.2,
+                    fill: '+1', // Fill to the next dataset
+                    pointRadius: 0
+                });
+                
+                fpsChart.data.datasets.push({
+                    label: 'Max FPS',
+                    data: data.maxValues,
+                    borderColor: 'rgba(0, 123, 255, 0.2)',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    tension: 0.2,
+                    pointRadius: 0
+                });
+                
+                // Update min-max display
+                const minFps = Math.min(...data.minValues);
+                const maxFps = Math.max(...data.maxValues);
+                document.getElementById('fps-min').textContent = minFps.toFixed(1);
+                document.getElementById('fps-max').textContent = maxFps.toFixed(1);
+            } else {
+                // Simple single dataset for raw data
+                fpsChart.data.labels = data.labels || [];
+                
+                // Clear existing datasets
+                fpsChart.data.datasets = [{
+                    label: 'FPS Values',
+                    data: data.values || [],
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: true
+                }];
+            }
+            
+            // Update chart title based on timeframe
+            let chartTitle = 'FPS';
+            switch(fpsTimeframe) {
+                case 'hourly': chartTitle = 'Hourly FPS'; break;
+                case 'daily': chartTitle = 'Daily FPS'; break;
+                case 'weekly': chartTitle = 'Weekly FPS'; break;
+                case 'monthly': chartTitle = 'Monthly FPS'; break;
+                default: chartTitle = 'FPS';
+            }
+            
+            fpsChart.options.scales.y.title.text = chartTitle;
+            fpsChart.update();
+            
+            // Update last updated timestamp
+            document.getElementById('fps-last-updated').textContent = `Last updated: ${data.timestamp || new Date().toLocaleString()} (Auto Update: ${refreshInterval/1000}s)`;
+        }
+        
+        // Update the Players dashboard with received data
+        function updatePlayersDashboard(data) {
+            // Update metrics
+            document.getElementById('latest-players').textContent = data.latestPlayerCount !== null ? data.latestPlayerCount : '--';
+            document.getElementById('average-players').textContent = data.averagePlayerCount || '--';
+            
+            // Update status
+            const status = getStatusFromPlayerCount(data.latestPlayerCount);
+            const statusElement = document.getElementById('players-status');
+            statusElement.textContent = status.text;
+            statusElement.style.color = status.color;
+            
+            // Update chart datasets
+            if (playersTimeframe !== 'raw' && data.minValues && data.maxValues) {
+                // Multiple datasets for aggregated data
+                playersChart.data.labels = data.labels;
+                
+                // Clear existing datasets
+                playersChart.data.datasets = [];
+                
+                // Add average dataset
+                playersChart.data.datasets.push({
+                    label: 'Average Players',
+                    data: data.values,
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: false,
+                    stepped: playersTimeframe === 'raw' // Only use stepped for raw data
+                });
+                
+                // Add min-max range using area chart
+                playersChart.data.datasets.push({
+                    label: 'Player Range',
+                    data: data.minValues,
+                    borderColor: 'rgba(40, 167, 69, 0.2)',
+                    backgroundColor: 'rgba(40, 167, 69, 0.05)',
+                    borderWidth: 1,
+                    tension: 0.2,
+                    fill: '+1', // Fill to the next dataset
+                    pointRadius: 0
+                });
+                
+                playersChart.data.datasets.push({
+                    label: 'Max Players',
+                    data: data.maxValues,
+                    borderColor: 'rgba(40, 167, 69, 0.2)',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    tension: 0.2,
+                    pointRadius: 0
+                });
+                
+                // Update min-max display
+                const minPlayers = Math.min(...data.minValues);
+                const maxPlayers = Math.max(...data.maxValues);
+                document.getElementById('players-min').textContent = minPlayers.toFixed(0);
+                document.getElementById('players-max').textContent = maxPlayers.toFixed(0);
+            } else {
+                // Simple single dataset for raw data
+                playersChart.data.labels = data.labels || [];
+                
+                // Clear existing datasets
+                playersChart.data.datasets = [{
+                    label: 'Player Count',
+                    data: data.values || [],
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: true,
+                    stepped: true // Use stepped line for player count
+                }];
+            }
+            
+            // Update chart title based on timeframe
+            let chartTitle = 'Players';
+            switch(playersTimeframe) {
+                case 'hourly': chartTitle = 'Hourly Players'; break;
+                case 'daily': chartTitle = 'Daily Players'; break;
+                case 'weekly': chartTitle = 'Weekly Players'; break;
+                case 'monthly': chartTitle = 'Monthly Players'; break;
+                default: chartTitle = 'Players';
+            }
+            
+            playersChart.options.scales.y.title.text = chartTitle;
+            playersChart.update();
+            
+            // Update last updated timestamp
+            document.getElementById('players-last-updated').textContent = `Last updated: ${data.timestamp || new Date().toLocaleString()} (Auto Update: ${refreshInterval/1000}s)`;
+        }
+
+        // Fetch FPS data from API
+        function fetchFpsData() {
+            fetch(`/api/fps?timeframe=${fpsTimeframe}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateFpsDashboard(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching FPS data:', error);
+                    document.getElementById('fps-status').textContent = 'Error';
+                    document.getElementById('fps-status').style.color = '#dc3545';
+                });
+        }
+        
+        // Fetch Players data from API
+        function fetchPlayersData() {
+            fetch(`/api/players?timeframe=${playersTimeframe}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updatePlayersDashboard(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching Players data:', error);
+                    document.getElementById('players-status').textContent = 'Error';
+                    document.getElementById('players-status').style.color = '#dc3545';
+                });
+        }
+        
+        // Function to fetch uptime data
+        function fetchUptimeData() {
+            fetch('/api/uptime')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateUptimeDisplay(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching uptime data:', error);
+                    document.getElementById('uptime-status').textContent = 'Error';
+                    document.getElementById('uptime-status').style.color = '#dc3545';
+                });
+        }
+        
+        // Update the uptime display with received data
+        function updateUptimeDisplay(data) {
+            // Update time values
+            document.getElementById('uptime-days').textContent = data.uptime.days;
+            document.getElementById('uptime-hours').textContent = data.uptime.hours;
+            document.getElementById('uptime-minutes').textContent = data.uptime.minutes;
+            
+            // Update details
+            document.getElementById('uptime-string').textContent = data.message || data.uptimeString;
+            document.getElementById('uptime-start-time').textContent = data.startTime ? new Date(data.startTime).toLocaleString() : 'Unknown';
+            document.getElementById('uptime-current-time').textContent = new Date(data.currentTime).toLocaleString();
+            document.getElementById('uptime-status').textContent = data.status;
+            
+            // Style status
+            const statusElement = document.getElementById('uptime-status');
+            if (data.status === 'online') {
+                statusElement.style.color = '#28a745';
+            } else {
+                statusElement.style.color = '#dc3545';
+            }
+            
+            // Update last updated
+            document.getElementById('uptime-last-updated').textContent = `Last updated: ${new Date().toLocaleString()} (Auto Update: ${refreshInterval/1000}s)`;
+        }
+        
+        // Function to fetch all data
+        function fetchAllData() {
+            fetchFpsData();
+            fetchPlayersData();
+            fetchUptimeData();
+        }
+
+        // Refresh rate is now included directly in the last updated text
+        
+        // Initial data fetch
+        fetchAllData();
+        
+        // Set up interval for data refresh
+        setInterval(fetchAllData, refreshInterval);
+    </script>
+</body>
+</html>
