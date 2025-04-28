@@ -147,7 +147,7 @@ npm test
 
 ## License
 
-This project is licensed under the terms of the [MIT License](../../LICENSE).
+This project is licensed under the terms of the LICENSE.txt
 
 ## Screenshots
 
