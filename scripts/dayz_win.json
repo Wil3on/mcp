@@ -15,14 +15,14 @@
       "hardware": "RAM 8G+",
       "size": "10GB+",
       "remark": "DayZ server using SteamCMD",
-      "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/arma_reforger_win.bat",
+      "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/dayz_win.bat",
       "author": "Bohemia Interactive & Wil3on",
       "setupInfo": {
         "type": "steam/universal",
         "processType": "general",
-        "startCommand": "DayZServer_x64.exe -config .\\config.json -profile .\\profile -maxFPS 100 -freezeCheck 25 -freezeCheckMode kill -autoreload 30 -logStats 60000 -AILimit 120 -logFS -addonsVerify -addonsRepair -backendlog -nothrow",
+        "startCommand": "DayZServer_x64.exe -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -profiles=server_profiles",
         "stopCommand": "^c",
-        "updateCommand": "cmd /c \"{mcsm_workspace}\\arma_reforger_win.bat\"",
+        "updateCommand": "cmd /c \"{mcsm_workspace}\\dayz_win.bat\"",
         "ie": "utf-8",
         "oe": "utf-8"
       }
