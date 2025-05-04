@@ -31,6 +31,66 @@
         "oe": "utf-8"
       }
     },
+      {
+        "language": "en_us",
+        "description": "Arma Reforger Linux Server with SteamCMD and installation shell script.",
+        "title": "Arma Reforger Linux Server",
+        "runtime": "Linux",
+        "hardware": "RAM 8G+",
+        "size": "10GB+",
+        "remark": "Arma Reforger server using SteamCMD",
+        "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/Linux/arma_reforger_linux.sh",
+        "author": "Bohemia Interactive & Wil3on",
+        "setupInfo": {
+          "type": "steam/universal",
+          "processType": "general",
+          "startCommand": "./ArmaReforgerServer -gproj ./addons/data/ArmaReforger.gproj -config ./config.json -profile ./profile -maxFPS 100 -freezeCheck 25 -freezeCheckMode kill -autoreload 10 -logStats 60000 -logFS -backendlog -nothrow -addonsRepair",
+          "stopCommand": "^c",
+          "updateCommand": "bash \"{mcsm_workspace}/arma_reforger_linux.sh\"",
+          "ie": "utf-8",
+          "oe": "utf-8"
+        }
+      },
+    {
+      "language": "en_us",
+      "description": "Before proceeding, ensure that you have already installed the required CommonRedist and DirectX packages on your Windows server. To download the server files, add your Steam login credentials to the dayz_win.bat file. We recommend using Steam Guard Mobile Authenticator for two-factor authentication (2FA). Alternatively, you can temporarily disable 2FA during the server installation process.",
+      "title": "DayZ Windows Server",
+      "runtime": "Windows",
+      "hardware": "RAM 8G+",
+      "size": "10GB+",
+      "remark": "DayZ server using SteamCMD",
+      "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/dayz_win.bat",
+      "author": "Bohemia Interactive & Wil3on",
+      "setupInfo": {
+        "type": "steam/universal",
+        "processType": "general",
+        "startCommand": "DayZServer_x64.exe -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -filePatching -cpuCount=6 -limitFPS=200 -profiles=server_profiles -mod= -serverMod=",
+        "stopCommand": "^c",
+        "updateCommand": "cmd /c \"{mcsm_workspace}\\dayz_win.bat\"",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+      {
+        "language": "en_us",
+        "description": "To download the server files, add your Steam login credentials to the dayz_linux.sh file. We recommend using Steam Guard Mobile Authenticator for two-factor authentication (2FA). Alternatively, you can temporarily disable 2FA during the server installation process.",
+        "title": "DayZ Linux Server",
+        "runtime": "Linux",
+        "hardware": "RAM 8G+",
+        "size": "10GB+",
+        "remark": "DayZ server using SteamCMD",
+        "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/Linux/dayz_linux.sh",
+        "author": "Bohemia Interactive & Wil3on",
+        "setupInfo": {
+          "type": "steam/universal",
+          "processType": "general",
+          "startCommand": "./DayZServer -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -filePatching -cpuCount=6 -limitFPS=200 -profiles=server_profiles -mod= -serverMod=",
+          "stopCommand": "^c",
+          "updateCommand": "bash \"{mcsm_workspace}/dayz_linux.sh\"",
+          "ie": "utf-8",
+          "oe": "utf-8"
+        }
+      },
     {
       "language": "en_us",
       "description": "[Purpur] Minecraft 1.21.4 Purpur",
