@@ -9,7 +9,7 @@
   "packages": [
     {
       "language": "en_us",
-      "description": "DayZ Windows Server with SteamCMD and installation .bat script. Make sure you have first installed CommonRedist and DirectX. To download server files you need add your login credentials to dayz_win.bat file. Recommended is to use Steam Guard Mobile Authenticator for 2FA OR disable while installing server.",
+      "description": "Make sure you have first installed CommonRedist and DirectX. To download server files you need add your login credentials to dayz_win.bat file. Recommended is to use Steam Guard Mobile Authenticator for 2FA OR disable while installing server.",
       "title": "DayZ Windows Server",
       "runtime": "Windows",
       "hardware": "RAM 8G+",
