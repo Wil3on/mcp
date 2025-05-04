@@ -1,1 +1,31 @@
-
+{
+    "remark": "This file is only used for quick deployment.",
+    "languages": [
+      {
+        "label": "English",
+        "value": "en_us"
+      }
+    ],
+    "packages": [
+      {
+        "language": "en_us",
+        "description": "DayZ Linux Server with SteamCMD and installation shell script.",
+        "title": "DayZ Linux Server",
+        "runtime": "Linux",
+        "hardware": "RAM 8G+",
+        "size": "10GB+",
+        "remark": "DayZ server using SteamCMD",
+        "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/Linux/arma_reforger_linux.sh",
+        "author": "Bohemia Interactive & Wil3on",
+        "setupInfo": {
+          "type": "steam/universal",
+          "processType": "general",
+          "startCommand": "./DayZServer -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -filePatching -cpuCount=6 -limitFPS=140 -profiles=server_profiles -mod=@CF;@VPPAdminTools -serverMod=",
+          "stopCommand": "^c",
+          "updateCommand": "bash \"{mcsm_workspace}/dayz_linux.sh\"",
+          "ie": "utf-8",
+          "oe": "utf-8"
+        }
+      }
+    ]
+}
