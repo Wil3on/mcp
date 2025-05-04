@@ -15,7 +15,7 @@
         "hardware": "RAM 8G+",
         "size": "10GB+",
         "remark": "DayZ server using SteamCMD",
-        "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/Linux/arma_reforger_linux.sh",
+        "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/Linux/dayz_linux.sh",
         "author": "Bohemia Interactive & Wil3on",
         "setupInfo": {
           "type": "steam/universal",
