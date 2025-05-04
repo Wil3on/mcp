@@ -20,7 +20,7 @@
       "setupInfo": {
         "type": "steam/universal",
         "processType": "general",
-        "startCommand": "DayZServer_x64.exe -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -filePatching -cpuCount=6 -limitFPS=140 -profiles=server_profiles -mod=@CF;@VPPAdminTools -serverMod=",
+        "startCommand": "DayZServer_x64.exe -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -filePatching -cpuCount=6 -limitFPS=200 -profiles=server_profiles -mod= -serverMod=",
         "stopCommand": "^c",
         "updateCommand": "cmd /c \"{mcsm_workspace}\\dayz_win.bat\"",
         "ie": "utf-8",
