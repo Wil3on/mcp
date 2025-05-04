@@ -9,7 +9,7 @@
     "packages": [
       {
         "language": "en_us",
-        "description": "DayZ Linux Server with SteamCMD and installation shell script.",
+        "description": "To download the server files, add your Steam login credentials to the dayz_linux.sh file. We recommend using Steam Guard Mobile Authenticator for two-factor authentication (2FA). Alternatively, you can temporarily disable 2FA during the server installation process.",
         "title": "DayZ Linux Server",
         "runtime": "Linux",
         "hardware": "RAM 8G+",
@@ -20,7 +20,7 @@
         "setupInfo": {
           "type": "steam/universal",
           "processType": "general",
-          "startCommand": "./DayZServer -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -filePatching -cpuCount=6 -limitFPS=140 -profiles=server_profiles -mod=@CF;@VPPAdminTools -serverMod=",
+          "startCommand": "./DayZServer -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -filePatching -cpuCount=6 -limitFPS=200 -profiles=server_profiles -mod= -serverMod=",
           "stopCommand": "^c",
           "updateCommand": "bash \"{mcsm_workspace}/dayz_linux.sh\"",
           "ie": "utf-8",
