@@ -147,5 +147,5 @@ echo "Installation complete."
 echo "Server has been installed to: $WORKSPACE"
 echo "You can now start your server through the MCSManager panel."
 
-echo "Script made by @Wil3on (modified for user login)"
+echo "Script made by @Wil3on"
 exit 0
