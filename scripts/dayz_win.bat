@@ -1,9 +1,19 @@
 @echo off
 setlocal enabledelayedexpansion
 
-echo DayZ Windows Server Installer
-echo ================================
+echo DayZ Windows Server Installer (with User Login)
+echo ================================================
 echo.
+
+:: --- !!! CONFIGURATION - EDIT THESE VALUES !!! ---
+
+:: Set your Steam username
+set STEAM_USER=
+
+:: Set your Steam password (!!! SECURITY RISK - SEE WARNING BELOW !!!)
+set STEAM_PASS=
+
+:: --- !!! END CONFIGURATION !!! ---
 
 :: Set basic variables
 set "WORKSPACE=%CD%"
@@ -12,6 +22,22 @@ set "STEAMCMD_URL=https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip"
 set "STEAMCMD_ZIP=%WORKSPACE%\steamcmd.zip"
 set "STEAMCMD_DIR=%WORKSPACE%\steamcmd"
 
+echo.
+echo ========================== SECURITY WARNING ==========================
+echo  Storing your Steam password directly in this script (%~f0)
+echo  is a SIGNIFICANT SECURITY RISK. Anyone with access to this file
+echo  will have your Steam credentials.
+echo.
+echo  RECOMMENDATIONS:
+echo  1. Use a DEDICATED Steam account solely for managing servers.
+echo  2. Secure this file and the computer it's on carefully.
+echo  3. Be aware of Steam Guard (2FA) requirements (see below).
+echo ======================================================================
+echo.
+echo Proceeding automatically...
+echo.
+
+
 :: Try to get local IP
 for /f "tokens=2 delims=:" %%i in ('ipconfig ^| find "IPv4"') do (
     set "LOCAL_IP=%%i"
@@ -19,136 +45,125 @@ for /f "tokens=2 delims=:" %%i in ('ipconfig ^| find "IPv4"') do (
     goto :ip_found
 )
 :ip_found
+if not defined LOCAL_IP set "LOCAL_IP=127.0.0.1" :: Fallback if IP not found
 
 :: Try to get public IP
 set "PUBLIC_IP=%LOCAL_IP%"
-powershell -Command "(Invoke-WebRequest -Uri 'https://api.ipify.org' -UseBasicParsing).Content" > "%TEMP%\public_ip.txt"
-set /p PUBLIC_IP_TEMP=<"%TEMP%\public_ip.txt"
-if not "%PUBLIC_IP_TEMP%"=="" set "PUBLIC_IP=%PUBLIC_IP_TEMP%"
-del "%TEMP%\public_ip.txt" 2>nul
+powershell -Command "(Invoke-WebRequest -Uri 'https://api.ipify.org' -UseBasicParsing).Content" > "%TEMP%\public_ip.txt" 2>nul
+if exist "%TEMP%\public_ip.txt" (
+    set /p PUBLIC_IP_TEMP=<"%TEMP%\public_ip.txt"
+    if not "%PUBLIC_IP_TEMP%"=="" set "PUBLIC_IP=%PUBLIC_IP_TEMP%"
+    del "%TEMP%\public_ip.txt" 2>nul
+) else (
+    echo WARNING: Could not retrieve public IP. Using local IP instead.
+)
+
 
 echo Workspace: %WORKSPACE%
 echo Steam App ID: %STEAM_APP_ID%
+echo Steam Username: %STEAM_USER%
 echo Local IP: %LOCAL_IP%
 echo Public IP: %PUBLIC_IP%
 echo.
 
-:: Create steamcmd directory
-echo Creating SteamCMD directory...
-if not exist "%STEAMCMD_DIR%" mkdir "%STEAMCMD_DIR%"
-echo.
+:: Create steamcmd directory if it doesn't exist
+if not exist "%STEAMCMD_DIR%" (
+    echo Creating SteamCMD directory...
+    mkdir "%STEAMCMD_DIR%"
+    if errorlevel 1 (
+        echo ERROR: Failed to create directory %STEAMCMD_DIR%. Check permissions.
+        pause
+        exit /b 1
+    )
+    echo.
+)
 
-:: Download SteamCMD
-echo Downloading SteamCMD...
-powershell -Command "Invoke-WebRequest -Uri '%STEAMCMD_URL%' -OutFile '%STEAMCMD_ZIP%' -UseBasicParsing"
-echo Download complete.
-echo.
+:: Download SteamCMD if zip doesn't exist
+if not exist "%STEAMCMD_ZIP%" (
+    if not exist "%STEAMCMD_DIR%\steamcmd.exe" (
+        echo Downloading SteamCMD...
+        powershell -Command "try { Invoke-WebRequest -Uri '%STEAMCMD_URL%' -OutFile '%STEAMCMD_ZIP%' -UseBasicParsing } catch { Write-Error 'Failed to download SteamCMD. Check URL or network connection.'; exit 1 }"
+        if errorlevel 1 (
+             echo ERROR: Failed to download SteamCMD. Please check your internet connection or the URL.
+             if exist "%STEAMCMD_ZIP%" del "%STEAMCMD_ZIP%"
+             pause
+             exit /b 1
+        )
+        echo Download complete.
+        echo.
+    )
+)
 
-:: Extract SteamCMD
-echo Extracting SteamCMD...
-powershell -Command "Expand-Archive -Path '%STEAMCMD_ZIP%' -DestinationPath '%STEAMCMD_DIR%' -Force"
-echo Extraction complete.
-echo.
+:: Extract SteamCMD if needed
+if exist "%STEAMCMD_ZIP%" (
+    echo Extracting SteamCMD...
+    powershell -Command "try { Expand-Archive -Path '%STEAMCMD_ZIP%' -DestinationPath '%STEAMCMD_DIR%' -Force } catch { Write-Error 'Failed to extract SteamCMD. ZIP might be corrupt or permissions issue.'; exit 1 }"
+     if errorlevel 1 (
+        echo ERROR: Failed to extract SteamCMD. The ZIP file might be corrupt or you lack permissions.
+        pause
+        exit /b 1
+     )
+    echo Extraction complete.
+    echo.
+    :: Delete ZIP file after successful extraction
+    del "%STEAMCMD_ZIP%"
+)
 
-:: Delete ZIP file
-if exist "%STEAMCMD_ZIP%" del "%STEAMCMD_ZIP%"
 
 :: Find steamcmd.exe
 if exist "%STEAMCMD_DIR%\steamcmd.exe" (
     set "STEAMCMD_EXE=%STEAMCMD_DIR%\steamcmd.exe"
-) else if exist "%STEAMCMD_DIR%\Steam\steamcmd.exe" (
-    set "STEAMCMD_EXE=%STEAMCMD_DIR%\Steam\steamcmd.exe"
 ) else (
-    echo ERROR: Could not find steamcmd.exe
-    exit /b 1
+    :: Attempt a deeper search in case it extracted into a subfolder (less common now)
+    if exist "%STEAMCMD_DIR%\Steam\steamcmd.exe" (
+        set "STEAMCMD_EXE=%STEAMCMD_DIR%\Steam\steamcmd.exe"
+    ) else (
+        echo ERROR: Could not find steamcmd.exe in %STEAMCMD_DIR%
+        echo Please ensure SteamCMD downloaded and extracted correctly.
+        pause
+        exit /b 1
+    )
 )
 
-:: Run SteamCMD to install server
-echo Installing server...
-"%STEAMCMD_EXE%" +login anonymous +force_install_dir "%WORKSPACE%" +app_update %STEAM_APP_ID% validate +quit
+:: Run SteamCMD to install/update server using provided credentials
+echo.
+echo Starting SteamCMD to install/update DayZ Server (App ID: %STEAM_APP_ID%)...
+echo Using Username: %STEAM_USER%
+echo Installing to: %WORKSPACE%
+echo.
+echo ========================== IMPORTANT NOTE ==========================
+echo If Steam Guard (2-Factor Authentication) is enabled for the account
+echo '%STEAM_USER%', SteamCMD will likely pause and prompt you here
+echo to enter the current code from your authenticator app or email.
+echo You MUST type the code in this console window and press Enter.
+echo This script CANNOT automate the 2FA process.
+echo ====================================================================
+echo.
 
-:: Check if config.json already exists
-if exist "%WORKSPACE%\config.json" (
-    echo Config file already exists. Preserving existing configuration.
+"%STEAMCMD_EXE%" +force_install_dir "%WORKSPACE%" +login %STEAM_USER% %STEAM_PASS% +app_update %STEAM_APP_ID% validate +quit
+
+:: Check SteamCMD Exit Code
+if errorlevel 1 (
+    echo WARNING: SteamCMD exited with an error (code %errorlevel%).
+    echo Check the output above. Common issues include:
+    echo   - Incorrect username/password
+    echo   - Steam Guard code required but not entered or entered incorrectly
+    echo   - Network/Steam connectivity problems
+    echo   - Disk space issues in %WORKSPACE%
+    pause
+    :: Decide if you want to exit here or continue with potentially incomplete files
+    :: exit /b 1
 ) else (
-    :: Create config.json if it doesn't exist
-    echo Creating config.json...
-    (
-    echo {
-    echo 	"bindAddress": "%LOCAL_IP%",
-    echo 	"bindPort": 2001,
-    echo 	"publicAddress": "%PUBLIC_IP%",
-    echo 	"publicPort": 2001,
-    echo 	"a2s": {
-    echo 		"address": "%LOCAL_IP%",
-    echo 		"port": 17777
-    echo 	},
-    echo 	"rcon": {
-    echo 		"address": "%LOCAL_IP%",
-    echo 		"port": 19999,
-    echo 		"password": "MyPassRcon",
-    echo 		"permission": "monitor",
-    echo 		"blacklist": [],
-    echo 		"whitelist": []
-    echo 	},
-    echo 	"game": {
-    echo 		"name":"Wil3on MCS Server Win",
-    echo 		"password": "",
-    echo 		"passwordAdmin": "MyPass",
-    echo 		"admins" : [
-    echo 			"66561199094966237"
-    echo 		],
-    echo 		"scenarioId": "{ECC61978EDCC2B5A}Missions/23_Campaign.conf",
-    echo 		"maxPlayers": 128,
-    echo 		"visible": true,
-    echo 		"crossPlatform": true,
-    echo 		"supportedPlatforms": [
-    echo 			"PLATFORM_PC",
-    echo 			"PLATFORM_XBL"
-    echo 		],
-    echo 		"gameProperties": {
-    echo 			"serverMaxViewDistance": 2500,
-    echo 			"serverMinGrassDistance": 50,
-    echo 			"networkViewDistance": 1000,
-    echo 			"disableThirdPerson": true,
-    echo 			"fastValidation": true,
-    echo 			"battlEye": true,
-    echo 			"VONDisableUI": false,
-    echo 			"VONDisableDirectSpeechUI": false,
-    echo 			"missionHeader": {
-    echo 				"m_iPlayerCount": 40,
-    echo 				"m_eEditableGameFlags": 6,
-    echo 				"m_eDefaultGameFlags": 6,
-    echo 				"other": "values"
-    echo 			}
-    echo 		},
-    echo 		"mods": [
-    echo {
-    echo   "modId": "5AAAC70D754245DD",
-    echo   "name": "Server Admin Tools",
-    echo   "version": ""
-    echo }
-    echo 		]
-    echo 	},
-    echo     "operating": {
-    echo         "playerSaveTime": 420,
-    echo         "slotReservationTimeout": 60,
-    echo         "disableServerShutdown": false,
-    echo         "lobbyPlayerSynchronise": true,
-    echo         "joinQueue": {
-    echo             "maxSize": 50
-    echo         },
-    echo         "disableNavmeshStreaming": []
-    echo     }
-    echo }
-    ) > "%WORKSPACE%\config.json"
-    echo Config file created.
+    echo SteamCMD process completed successfully.
 )
+echo.
 
 echo.
-echo Installation complete.
-echo Server has been installed to: %WORKSPACE%
-echo You can now start your server through the MCSManager panel.
+echo Installation/Update complete.
+echo Server files should be located in: %WORKSPACE%
+echo You can now start your server through the MCSManager panel or manually.
 
-echo Script made by @Wil3on
+echo Script made by @Wil3on (modified for user login)
+echo.
+pause
 exit /b 0
