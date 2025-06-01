@@ -20,7 +20,7 @@
         "setupInfo": {
           "type": "steam/universal",
           "processType": "general",
-          "startCommand": "./ArmaReforgerServer -gproj ./addons/data/ArmaReforger.gproj -config ./config.json -profile ./profile -maxFPS 100 -freezeCheck 25 -freezeCheckMode kill -autoreload 10 -logStats 60000 -logFS -backendlog -nothrow -addonsRepair",
+          "startCommand": "./ArmaReforgerServer -gproj ./addons/data/ArmaReforger.gproj -config ./config.json -profile ./profile -maxFPS 60 -freezeCheck 25 -freezeCheckMode kill -autoreload 10 -autoshutdown -logStats 60000 -logFS -backendlog -nothrow -addonsVerify -addonsRepair -logVoting -AILimit 120",
           "stopCommand": "^c",
           "updateCommand": "bash \"{mcsm_workspace}/arma_reforger_linux.sh\"",
           "ie": "utf-8",
