@@ -1,17 +1,18 @@
 {
-  "remark": "This file is only used for quick deployment.",
   "languages": [
     {
       "label": "English",
-      "value": "en_us"
+      "value": "en_us",
+      "path": "templates-en.json"
     },
     {
-      "label": "简体中文",
-      "value": "zh_cn"
+      "label": "中文",
+      "value": "zh_cn",
+      "path": "templates-zh.json"
     }
   ],
   "packages": [
-    {
+  {
       "language": "en_us",
       "description": "Arma Reforger Windows Server with SteamCMD and installation .bat script.",
       "title": "Arma Reforger Windows Server",
@@ -74,14 +75,16 @@
       {
         "language": "en_us",
         "description": "To download the server files, add your Steam login credentials to the dayz_linux.sh file. We recommend using Steam Guard Mobile Authenticator for two-factor authentication (2FA). Alternatively, you can temporarily disable 2FA during the server installation process.",
+        "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/221100/header.jpg",
         "title": "DayZ Linux Server",
-        "runtime": "Linux",
+        "platform": "Linux",
         "hardware": "RAM 8G+",
         "size": "10GB+",
         "remark": "DayZ server using SteamCMD",
         "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/Linux/dayz_linux.sh",
         "author": "Bohemia Interactive & Wil3on",
         "setupInfo": {
+          "tag": ["DayZ"],
           "type": "steam/universal",
           "processType": "general",
           "startCommand": "./DayZServer -config=serverDZ.cfg -port=2302 -dologs -adminlog -netlog -freezecheck -filePatching -cpuCount=6 -limitFPS=200 -profiles=server_profiles -mod= -serverMod=",
@@ -92,208 +95,165 @@
         }
       },
     {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.21.4 Purpur",
-      "title": "Minecraft 1.21.4",
+      "title": "幻兽帕鲁官方服务器",
+      "language": "zh_cn",
+      "platform": "Windows",
+      "description": "适用于 Windows 的帕鲁们的最佳服务器！",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/palworld.webp",
+      "remark": "",
+      "gameType": "Palworld",
+      "category": "最新版本",
+      "runtime": "Windows 10+",
+      "hardware": "RAM 8G+",
+      "size": "",
+      "targetLink": "",
+      "author": "MCSManager",
+      "tags": ["仅适合个人使用", "Windows 版"],
+      "setupInfo": {
+        "tag": ["Palworld"],
+        "type": "steam/universal",
+        "startCommand": "PalServer.exe",
+        "stopCommand": "exit",
+        "updateCommand": "{mcsm_steamcmd} +login anonymous +force_install_dir \"{mcsm_workspace}\" +app_update 2394010 +quit",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "title": "幻兽帕鲁官方服务器",
+      "language": "zh_cn",
+      "platform": "Linux",
+      "description": "本模板使用 Docker 安装，Linux 服务器必须安装 Docker！安装后默认的密码是 123456，修改请前往环境变量处修改。",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/palworld.webp",
+      "gameType": "Palworld",
+      "category": "最新版本",
+      "runtime": "Ubuntu/Centos LTS",
+      "hardware": "RAM 8G+",
+      "size": "",
+      "targetLink": "",
+      "author": "MCSManager",
+      "tags": ["可以商业出租", "Docker 版"],
+      "setupInfo": {
+        "stopCommand": "stop",
+        "ie": "utf8",
+        "oe": "utf8",
+        "type": "steam/universal",
+        "tag": ["Palworld"],
+        "fileCode": "utf8",
+        "processType": "docker",
+        "updateCommand": "",
+        "docker": {
+          "image": "kagurazakanyaa/palworld:latest",
+          "changeWorkdir": false,
+          "networkMode": "bridge",
+          "containerName": "palworld-server",
+          "workingDir": "/opt/palworld/Pal/Saved",
+          "ports": ["{mcsm_port1}:8211/tcp", "{mcsm_port2}:25575/tcp"],
+          "env": [
+            "SERVER_NAME=Private PalWorld Server",
+            "SERVER_DESC=Private PalWorld Server",
+            "ADMIN_PASSWORD=123456"
+          ]
+        }
+      }
+    },
+    {
+      "title": "僵尸毁灭工程",
+      "language": "zh_cn",
+      "platform": "Linux",
+      "description": "适用于 Linux 系统，使用《僵尸毁灭工程》第三方 Docker 镜像，快速开服！",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/pzomboid.webp",
+      "gameType": "Zombie Survival",
+      "category": "最新版本",
+      "runtime": "Ubuntu/Centos LTS",
+      "hardware": "RAM 8G+",
+      "size": "",
+      "targetLink": "",
+      "author": "MCSManager",
+      "tags": ["可以商业出租", "Docker 版"],
+      "setupInfo": {
+        "startCommand": "",
+        "stopCommand": "stop",
+        "ie": "utf8",
+        "oe": "utf8",
+        "type": "steam/universal",
+        "tag": ["Project Zomboid"],
+        "fileCode": "utf8",
+        "processType": "docker",
+        "updateCommand": "",
+        "docker": {
+          "image": "renegademaster/zomboid-dedicated-server:latest",
+          "containerName": "zomboid-dedicated-server",
+          "ports": ["{mcsm_port2}:16262/udp", "{mcsm_port1}:16261/udp"],
+          "extraVolumes": [
+            "{mcsm_workspace}/ZomboidConfig|/home/steam/Zomboid",
+            "{mcsm_workspace}/ZomboidDedicatedServer|/home/steam/ZomboidDedicatedServer"
+          ],
+          "memory": 4096,
+          "networkMode": "bridge",
+          "cpuUsage": 100,
+          "workingDir": "",
+          "env": [],
+          "changeWorkdir": false
+        }
+      }
+    },
+
+    {
+      "title": "Terraria 服务器",
+      "language": "zh_cn",
+      "platform": "Linux",
+      "description": "适用于 Linux 系统，使用《Terraria》第三方 Docker 镜像，快速开服！",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/terraria.webp",
+      "gameType": "Terraria",
+      "category": "最新版本",
+      "runtime": "Ubuntu/Centos LTS",
+      "hardware": "RAM 8G+",
+      "size": "",
+      "targetLink": "",
+      "author": "MCSManager",
+      "tags": ["可以商业出租", "Docker 版"],
+      "setupInfo": {
+        "startCommand": "",
+        "stopCommand": "exit",
+        "ie": "utf8",
+        "oe": "utf8",
+        "type": "steam/terraria",
+        "tag": ["terraria"],
+        "fileCode": "utf8",
+        "processType": "docker",
+        "updateCommand": "",
+        "docker": {
+          "image": "ryshe/terraria:latest",
+          "containerName": "terraria-server",
+          "ports": ["{mcsm_port1}:7777/tcp"],
+          "extraVolumes": [],
+          "memory": 4096,
+          "networkMode": "bridge",
+          "cpuUsage": 100,
+          "workingDir": "/root/.local/share/Terraria/Worlds",
+          "env": [],
+          "changeWorkdir": false
+        }
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "zh_cn",
+      "gameType": "Minecraft",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "description": "Paper Minecraft 1.21.8 快速开服，性能强，占用少，支持插件，不支持模组",
+      "title": "[Paper] Minecraft 1.21.8 Paper 快速开服",
+      "category": "mc-paper",
       "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.21.4-2408.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.21.4-2408.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.21.3 Purpur",
-      "title": "Minecraft 1.21.3",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.21.3-2358.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.21.3-2358.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.21.1 Purpur",
-      "title": "Minecraft 1.21.1",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.21.1-2329.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.21.1-2329.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.20.6 Purpur",
-      "title": "Minecraft 1.20.6",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.20.6-2233.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.20.6-2233.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.20.4 Purpur",
-      "title": "Minecraft 1.20.4",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.20.4-2176.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.20.4-2176.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.20.1 Purpur",
-      "title": "Minecraft 1.20.1",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.20.1-2062.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.20.1-2062.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.19.2 Purpur",
-      "title": "Minecraft 1.19.2",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.19.2-1858.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.19.2-1858.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.18.2 Purpur",
-      "title": "Minecraft 1.18.2",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.18.2-1632.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.18.2-1632.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.17.1 Purpur",
-      "title": "Minecraft 1.17.1",
-      "runtime": "Java 16+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.17.1-1428.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.17.1-1428.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Purpur] Minecraft 1.16.5 Purpur",
-      "title": "Minecraft 1.16.5",
-      "runtime": "Java 8+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Purpur included",
-      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.16.5-1171.jar",
-      "author": "purpurmc.org",
-      "setupInfo": {
-        "type": "minecraft/java/purpur",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.16.5-1171.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.21.4 Paper",
-      "title": "Minecraft 1.21.4",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.21.4/builds/178/downloads/paper-1.21.4-211.jar",
+      "hardware": "RAM 8G+",
+      "size": "100MB",
+      "remark": "仅包含 Paper 版本",
+      "targetLink": "https://fill-data.papermc.io/v1/objects/d310c61899acc608b683515c5c7ef929774bfd1b90262dac965e76c7e9ea8d22/paper-1.21.8-30.jar",
       "author": "papermc.io",
       "setupInfo": {
         "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.21.4-211.jar nogui",
+        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.21.8-30.jar nogui",
         "stopCommand": "stop",
         "updateCommand": "",
         "ie": "utf-8",
@@ -301,109 +261,18 @@
       }
     },
     {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.21.3 Paper",
-      "title": "Minecraft 1.21.3",
+      "platform": "ALL",
+      "language": "zh_cn",
+      "gameType": "Minecraft",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "description": "Paper Minecraft 1.20.1 快速开服，性能强，占用少，支持插件，不支持模组",
+      "title": "[Paper] Minecraft 1.20.1 Paper 快速开服",
+      "category": "mc-paper",
       "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.21.3/builds/82/downloads/paper-1.21.3-82.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.21.3-82.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.21.1 Paper",
-      "title": "Minecraft 1.21.1",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.21.1/builds/132/downloads/paper-1.21.1-132.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.21.1-132.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.20.6 Paper",
-      "title": "Minecraft 1.20.6",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.20.6/builds/151/downloads/paper-1.20.6-151.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.20.6-151.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.20.4 Paper",
-      "title": "Minecraft 1.20.4",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/499/downloads/paper-1.20.4-499.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.20.4-499.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.20.2 Paper",
-      "title": "Minecraft 1.20.2",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "150MB",
-      "remark": "Includes some basic plugins",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.20.2/builds/318/downloads/paper-1.20.2-318.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.20.2-318.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.20.1 Paper",
-      "title": "Minecraft 1.20.1",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "200MB",
-      "remark": "Includes some basic plugins",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.20.1/builds/196/downloads/paper-1.20.1-196.jar",
+      "hardware": "RAM 8G+",
+      "size": "100MB",
+      "remark": "仅包含 Paper 版本",
+      "targetLink": "https://fill-data.papermc.io/v1/objects/234a9b32098100c6fc116664d64e36ccdb58b5b649af0f80bcccb08b0255eaea/paper-1.20.1-196.jar",
       "author": "papermc.io",
       "setupInfo": {
         "type": "minecraft/java/paper",
@@ -415,942 +284,15 @@
       }
     },
     {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.19.4 Paper",
-      "title": "Minecraft 1.19.4",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.19.4/builds/550/downloads/paper-1.19.4-550.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.19.4-550.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.19.2 Paper",
-      "title": "Minecraft 1.19.2",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.19.2/builds/307/downloads/paper-1.19.2-307.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.19.2-307.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.18.2 Paper",
-      "title": "Minecraft 1.18.2",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.18.2/builds/388/downloads/paper-1.18.2-388.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.18.2-388.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.17.1 Paper",
-      "title": "Minecraft 1.17.1",
-      "runtime": "Java 16+",
-      "hardware": "RAM 4G+",
-      "size": "60MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.17.1/builds/411/downloads/paper-1.17.1-411.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.17.1-411.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.16.5 Paper",
-      "title": "Minecraft 1.16.5",
-      "runtime": "Java 8+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.16.5/builds/794/downloads/paper-1.16.5-794.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.16.5-794.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.12.2 Paper",
-      "title": "Minecraft 1.12.2",
-      "runtime": "Java 8+",
-      "hardware": "RAM 4G+",
-      "size": "50MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.12.2/builds/1620/downloads/paper-1.12.2-1620.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.12.2-1620.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Paper] Minecraft 1.8.8 Paper",
-      "title": "Minecraft 1.8.8",
-      "runtime": "Java 7+",
-      "hardware": "RAM 4G+",
-      "size": "20MB",
-      "remark": "Only Paper included",
-      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.8.8/builds/445/downloads/paper-1.8.8-445.jar",
-      "author": "papermc.io",
-      "setupInfo": {
-        "type": "minecraft/java/paper",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.8.8-445.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "NeoForge 1.21.4 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft NeoForge",
-      "targetLink": "https://maven.neoforged.net/releases/net/neoforged/neoforge/21.4.101-beta/neoforge-21.4.101-beta-installer.jar",
-      "author": "neoforged.net",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar neoforge-21.4.101-beta-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "NeoForge 1.20.6 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft NeoForge",
-      "targetLink": "https://maven.neoforged.net/releases/net/neoforged/neoforge/20.6.125/neoforge-20.6.125-installer.jar",
-      "author": "neoforged.net",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar neoforge-20.6.125-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "NeoForge 1.20.4 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft NeoForge",
-      "targetLink": "https://maven.neoforged.net/releases/net/neoforged/neoforge/20.4.239/neoforge-20.4.239-installer.jar",
-      "author": "neoforged.net",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar neoforge-20.4.239-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "NeoForge 1.20.2 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft NeoForge",
-      "targetLink": "https://maven.neoforged.net/releases/net/neoforged/neoforge/20.2.88/neoforge-20.2.88-installer.jar",
-      "author": "neoforged.net",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar neoforge-20.2.88-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.21.4 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.21.4-54.1.3/forge-1.21.4-54.1.3-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.21.4-54.1.3-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.21.3 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.21.3-53.1.0/forge-1.21.3-53.1.0-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.21.3-53.1.0-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.21.1 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.21.1-52.1.0/forge-1.21.1-52.0.53-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.21.1-52.1.0-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.20.6 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.6-50.2.0/forge-1.20.6-50.2.0-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.20.6-50.2.0-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.20.4 (Supports Mods)",
-      "runtime": "Java 21+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.4-49.2.0/forge-1.20.4-49.2.0-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.20.4-49.2.0-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.20.1 (Supports Mods)",
-      "runtime": "Java 17+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.4.0/forge-1.20.1-47.4.0-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.20.1-47.4.0-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.19.4 (Supports Mods)",
-      "runtime": "Java 17+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.4-45.4.0/forge-1.19.4-45.4.0-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.19.4-45.4.0-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.19.2 (Supports Mods)",
-      "runtime": "Java 17+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.2-43.5.0/forge-1.19.2-43.5.0-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.19.2-43.5.0-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.18.2 (Supports Mods)",
-      "runtime": "Java 17+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.18.2-40.3.9/forge-1.18.2-40.3.9-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.18.2-40.3.9-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.17.1 (Supports Mods)",
-      "runtime": "Java 16+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.17.1-37.1.1/forge-1.17.1-37.1.1-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.17.1-37.1.1-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.16.5 (Supports Mods)",
-      "runtime": "Java 8+",
-      "hardware": "RAM 8G+",
-      "size": "7MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.42/forge-1.16.5-36.2.42-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.16.5-36.2.42-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.12.2 (Supports Mods)",
-      "runtime": "Java 8+",
-      "hardware": "RAM 8G+",
-      "size": "5MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.12.2-14.23.5.2860-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.8.9 (Supports Mods)",
-      "runtime": "Java 7+",
-      "hardware": "RAM 8G+",
-      "size": "5MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.8.9-11.15.1.2318-1.8.9-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "Tip: The default startup command is \"sh ./run.sh\". If you need to run it on Windows, please change start command to \"run.bat\" after installation.",
-      "title": "Forge 1.7.10 (Supports Mods)",
-      "runtime": "Java 7+",
-      "hardware": "RAM 8G+",
-      "size": "5MB",
-      "remark": "Minecraft Forge",
-      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/forge-1.7.10-10.13.4.1614-1.7.10-installer.jar",
-      "author": "minecraftforge.net",
-      "setupInfo": {
-        "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar forge-1.7.10-10.13.4.1614-1.7.10-installer.jar --installServer",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.21.4 Fabric",
-      "title": "Minecraft 1.21.4 with Fabric Loader",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.21.4 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.21.3 Fabric",
-      "title": "Minecraft 1.21.3 with Fabric Loader",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.21.3 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.21.1 Fabric",
-      "title": "Minecraft 1.21.1 with Fabric Loader",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.21.1 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.20.6 Fabric",
-      "title": "Minecraft 1.20.6 with Fabric Loader",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.20.6 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.20.4 Fabric",
-      "title": "Minecraft 1.20.4 with Fabric Loader",
-      "runtime": "Java 21+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.20.4 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.20.1 Fabric",
-      "title": "Minecraft 1.20.1 with Fabric Loader",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.20.1 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.19.4 Fabric",
-      "title": "Minecraft 1.19.4 with Fabric Loader",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.19.4 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.19.2 Fabric",
-      "title": "Minecraft 1.19.2 with Fabric Loader",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.19.2 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.18.2 Fabric",
-      "title": "Minecraft 1.18.2 with Fabric Loader",
-      "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.18.2 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.17.1 Fabric",
-      "title": "Minecraft 1.17.1 with Fabric Loader",
-      "runtime": "Java 16+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.17.1 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.16.5 Fabric",
-      "title": "Minecraft 1.16.5 with Fabric Loader",
-      "runtime": "Java 8+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.16.5 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.15.2 Fabric",
-      "title": "Minecraft 1.15.2 with Fabric Loader",
-      "runtime": "Java 8+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.15.2 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Fabric] Minecraft 1.14.4 Fabric",
-      "title": "Minecraft 1.14.4 with Fabric Loader",
-      "runtime": "Java 8+",
-      "hardware": "RAM 4G+",
-      "size": "5MB",
-      "remark": "Minecraft Fabric",
-      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
-      "author": "fabricmc.net",
-      "setupInfo": {
-        "type": "minecraft/java/fabric",
-        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "java -jar fabric-installer-1.0.1.jar server -mcversion 1.14.4 -downloadMinecraft -noprofile",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.21.4",
-      "title": "Minecraft 1.21.4",
-      "runtime": "Java 21+",
-      "hardware": "RAM 2G+",
-      "size": "55MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/4707d00eb834b446575d89a61a11b5d548d8c001/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.21.1",
-      "title": "Minecraft 1.21.1",
-      "runtime": "Java 21+",
-      "hardware": "RAM 2G+",
-      "size": "50MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.20.6",
-      "title": "Minecraft 1.20.6",
-      "runtime": "Java 21+",
-      "hardware": "RAM 2G+",
-      "size": "50MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/145ff0858209bcfc164859ba735d4199aafa1eea/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.20.4",
-      "title": "Minecraft 1.20.4",
-      "runtime": "Java 21+",
-      "hardware": "RAM 2G+",
-      "size": "50MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.20.1",
-      "title": "Minecraft 1.20.1",
-      "runtime": "Java 17+",
-      "hardware": "RAM 2G+",
-      "size": "50MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.19.4",
-      "title": "Minecraft 1.19.4",
-      "runtime": "Java 17+",
-      "hardware": "RAM 2G+",
-      "size": "50MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/8f3112a1049751cc472ec13e397eade5336ca7ae/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.18.2",
-      "title": "Minecraft 1.18.2",
-      "runtime": "Java 17+",
-      "hardware": "RAM 2G+",
-      "size": "45MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/c8f83c5655308435b3dcf03c06d9fe8740a77469/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.17.1",
-      "title": "Minecraft 1.17.1",
-      "runtime": "Java 16+",
-      "hardware": "RAM 2G+",
-      "size": "45MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.16.5",
-      "title": "Minecraft 1.16.5",
-      "runtime": "Java 8+",
-      "hardware": "RAM 2G+",
-      "size": "45MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.12.2",
-      "title": "Minecraft 1.12.2",
-      "runtime": "Java 8+",
-      "hardware": "RAM 2G+",
-      "size": "30MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://piston-data.mojang.com/v1/objects/886945bfb2b978778c3a0288fd7fab09d315b25f/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
-      "language": "en_us",
-      "description": "[Vanilla] Minecraft 1.8.9",
-      "title": "Minecraft 1.8.9",
-      "runtime": "Java 7+",
-      "hardware": "RAM 2G+",
-      "size": "10MB",
-      "remark": "Minecraft Java",
-      "targetLink": "https://launcher.mojang.com/v1/objects/b58b2ceb36e01bcd8dbf49c8fb66c55a9f0676cd/server.jar",
-      "author": "Mojang",
-      "setupInfo": {
-        "type": "minecraft/java",
-        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
-        "stopCommand": "stop",
-        "updateCommand": "",
-        "ie": "utf-8",
-        "oe": "utf-8"
-      }
-    },
-    {
       "language": "zh_cn",
+      "platform": "ALL",
       "description": "[Paper] Minecraft 1.21.1 快速开服",
-      "title": "Minecraft 1.20.1",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "gameType": "Minecraft",
+      "title": "Minecraft 1.21.1 快速开服",
+      "category": "mc-paper",
       "runtime": "Java 17+",
-      "hardware": "RAM 4G+",
+      "hardware": "RAM 8G+",
       "size": "250MB",
       "remark": "包含基础插件，萌新快速开服！低配机器专属！",
       "targetLink": "https://cloud.alongw.cn/f/DzvHK/Paper-1.21.1-ZH.zip",
@@ -1366,8 +308,12 @@
     },
     {
       "language": "zh_cn",
+      "platform": "ALL",
       "description": "[Paper] 中小型互通服推荐，1.20.4 版本，快速开服，包含ESS、锁箱子、操作回滚、领地商店等基础插件。",
-      "title": "Minecraft 1.20.4 (低配机器推荐)",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "gameType": "Minecraft",
+      "title": "Minecraft 1.20.4",
+      "category": "mc-paper",
       "runtime": "Java 21+",
       "hardware": "RAM 6G+",
       "size": "140MB",
@@ -1385,8 +331,12 @@
     },
     {
       "language": "zh_cn",
-      "description": "注意：默认的启动命令是 \"sh ./run.sh\"，如果需要在 Windows 上运行，请在安装后将命令修改为 \"start.bat\"",
+      "platform": "Linux",
+      "description": "Minecraft Forge 1.20.1 服务器，支持 Forge 模组！",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "gameType": "Minecraft",
       "title": "Forge 1.20.1 Java 版 (支持模组)",
+      "category": "mc-forge",
       "runtime": "Java 17+",
       "hardware": "RAM 8G+",
       "size": "7MB",
@@ -1404,8 +354,35 @@
     },
     {
       "language": "zh_cn",
-      "description": "注意：默认的启动命令是 \"sh ./run.sh\"，如果需要在 Windows 上运行，请在安装后将命令修改为 \"start.bat\"",
+      "platform": "Windows",
+      "description": "Minecraft Forge 1.20.1 服务器，支持 Forge 模组！",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "gameType": "Minecraft",
+      "title": "Forge 1.20.1 Java 版 (支持模组)",
+      "category": "mc-forge",
+      "runtime": "Java 17+",
+      "hardware": "RAM 8G+",
+      "size": "7MB",
+      "remark": "Minecraft Forge",
+      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.33/forge-1.20.1-47.3.33-installer.jar",
+      "author": "minecraftforge.net",
+      "setupInfo": {
+        "type": "minecraft/java/forge",
+        "startCommand": "start.bat",
+        "stopCommand": "stop",
+        "updateCommand": "java -jar forge-1.20.1-47.3.33-installer.jar --installServer",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "language": "zh_cn",
+      "platform": "Windows",
+      "description": "适用于 Windows 系统，支持 Minecraft Forge 模组，快速开服！",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "gameType": "Minecraft",
       "title": "Forge 1.20.6 Java 版 (支持模组)",
+      "category": "mc-forge",
       "runtime": "Java 21+",
       "hardware": "RAM 8G+",
       "size": "7MB",
@@ -1414,7 +391,7 @@
       "author": "minecraftforge.net",
       "setupInfo": {
         "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
+        "startCommand": "start.bat",
         "stopCommand": "stop",
         "updateCommand": "java -jar forge-1.20.6-50.1.48-installer.jar --installServer",
         "ie": "utf-8",
@@ -1423,8 +400,12 @@
     },
     {
       "language": "zh_cn",
-      "description": "注意：默认的启动命令是 \"sh ./run.sh\"，如果需要在 Windows 上运行，请在安装后将命令修改为 \"start.bat\"",
+      "platform": "Windows",
+      "description": "适用于 Windows 系统，支持 Minecraft Forge 模组，快速开服！",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "gameType": "Minecraft",
       "title": "Forge 1.19.2 Java 版 (支持模组)",
+      "category": "mc-forge",
       "runtime": "Java 17+",
       "hardware": "RAM 8G+",
       "size": "7MB",
@@ -1433,9 +414,406 @@
       "author": "minecraftforge.net",
       "setupInfo": {
         "type": "minecraft/java/forge",
-        "startCommand": "sh ./run.sh",
+        "startCommand": "start.bat",
         "stopCommand": "stop",
         "updateCommand": "java -jar forge-1.19.2-43.4.20-installer.jar --installServer",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+
+    {
+      "title": "Palworld Official Server",
+      "language": "en_us",
+      "platform": "Windows",
+      "description": "The best Palworld server for Windows!",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/palworld.webp",
+      "remark": "",
+      "gameType": "Palworld",
+      "category": "Latest Version",
+      "runtime": "Windows 10+",
+      "hardware": "RAM 8G+",
+      "size": "",
+      "targetLink": "",
+      "author": "MCSManager",
+      "tags": ["Windows version"],
+      "setupInfo": {
+        "tag": ["Palworld"],
+        "type": "steam/universal",
+        "startCommand": "PalServer.exe",
+        "stopCommand": "exit",
+        "updateCommand": "{mcsm_steamcmd} +login anonymous +force_install_dir \"{mcsm_workspace}\" +app_update 2394010 +quit",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "title": "Palworld Official Server",
+      "language": "en_us",
+      "platform": "Linux",
+      "description": "This template uses Docker for installation. Docker must be installed on your Linux server! The default password after installation is 123456. To change it, please go to the environment variables.",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/palworld.webp",
+      "gameType": "Palworld",
+      "category": "Latest Version",
+      "runtime": "Ubuntu/Centos LTS",
+      "hardware": "RAM 8G+",
+      "size": "",
+      "targetLink": "",
+      "author": "MCSManager",
+      "tags": ["Docker version"],
+      "setupInfo": {
+        "stopCommand": "stop",
+        "ie": "utf8",
+        "oe": "utf8",
+        "type": "steam/universal",
+        "tag": ["Palworld"],
+        "fileCode": "utf8",
+        "processType": "docker",
+        "updateCommand": "",
+        "docker": {
+          "image": "kagurazakanyaa/palworld:latest",
+          "changeWorkdir": false,
+          "networkMode": "bridge",
+          "containerName": "palworld-server",
+          "workingDir": "/opt/palworld/Pal/Saved",
+          "ports": ["{mcsm_port1}:8211/tcp", "{mcsm_port2}:25575/tcp"],
+          "env": [
+            "SERVER_NAME=Private PalWorld Server",
+            "SERVER_DESC=Private PalWorld Server",
+            "ADMIN_PASSWORD=123456"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Project Zomboid",
+      "language": "en_us",
+      "platform": "Linux",
+      "description": "For Linux systems, using a third-party Docker image of Project Zomboid for quick server deployment!",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/pzomboid.webp",
+      "gameType": "Zombie Survival",
+      "category": "Latest Version",
+      "runtime": "Ubuntu/Centos LTS",
+      "hardware": "RAM 8G+",
+      "size": "",
+      "targetLink": "",
+      "author": "MCSManager",
+      "tags": ["Docker version"],
+      "setupInfo": {
+        "startCommand": "",
+        "stopCommand": "stop",
+        "ie": "utf8",
+        "oe": "utf8",
+        "type": "steam/universal",
+        "tag": ["Project Zomboid"],
+        "fileCode": "utf8",
+        "processType": "docker",
+        "updateCommand": "",
+        "docker": {
+          "image": "renegademaster/zomboid-dedicated-server:latest",
+          "containerName": "zomboid-dedicated-server",
+          "ports": ["{mcsm_port2}:16262/udp", "{mcsm_port1}:16261/udp"],
+          "extraVolumes": [
+            "{mcsm_workspace}/ZomboidConfig|/home/steam/Zomboid",
+            "{mcsm_workspace}/ZomboidDedicatedServer|/home/steam/ZomboidDedicatedServer"
+          ],
+          "memory": 4096,
+          "networkMode": "bridge",
+          "cpuUsage": 100,
+          "workingDir": "",
+          "env": [],
+          "changeWorkdir": false
+        }
+      }
+    },
+
+    {
+      "title": "Terraria Server",
+      "language": "en_us",
+      "platform": "Linux",
+      "description": "For Linux systems, using a third-party Docker image of Terraria for quick server deployment!",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/terraria.webp",
+      "gameType": "Terraria",
+      "category": "Latest Version",
+      "runtime": "Ubuntu/Centos LTS",
+      "hardware": "RAM 8G+",
+      "size": "",
+      "targetLink": "",
+      "author": "MCSManager",
+      "tags": ["Docker version"],
+      "setupInfo": {
+        "startCommand": "",
+        "stopCommand": "exit",
+        "ie": "utf8",
+        "oe": "utf8",
+        "type": "steam/terraria",
+        "tag": ["terraria"],
+        "fileCode": "utf8",
+        "processType": "docker",
+        "updateCommand": "",
+        "docker": {
+          "image": "ryshe/terraria:latest",
+          "containerName": "terraria-server",
+          "ports": ["{mcsm_port1}:7777/tcp"],
+          "extraVolumes": [],
+          "memory": 4096,
+          "networkMode": "bridge",
+          "cpuUsage": 100,
+          "workingDir": "/root/.local/share/Terraria/Worlds",
+          "env": [],
+          "changeWorkdir": false
+        }
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "gameType": "Minecraft",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "description": "[Paper] Minecraft 1.21.8 Paper Quick Server Setup, High Performance, Low Resource Usage, Plugin Support, No Mod Support",
+      "title": "Paper Minecraft 1.21.8 Quick Server Setup",
+      "category": "mc-paper",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "100MB",
+      "remark": "Paper version only",
+      "targetLink": "https://fill-data.papermc.io/v1/objects/d310c61899acc608b683515c5c7ef929774bfd1b90262dac965e76c7e9ea8d22/paper-1.21.8-30.jar",
+      "author": "papermc.io",
+      "setupInfo": {
+        "type": "minecraft/java/paper",
+        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.21.8-30.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "gameType": "Minecraft",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "description": "[Paper] Minecraft 1.20.1 Paper Quick Server Setup, High Performance, Low Resource Usage, Plugin Support, No Mod Support",
+      "title": "Paper Minecraft 1.20.1 Quick Server Setup",
+      "category": "mc-paper",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "100MB",
+      "remark": "Paper version only",
+      "targetLink": "https://fill-data.papermc.io/v1/objects/234a9b32098100c6fc116664d64e36ccdb58b5b649af0f80bcccb08b0255eaea/paper-1.20.1-196.jar",
+      "author": "papermc.io",
+      "setupInfo": {
+        "type": "minecraft/java/paper",
+        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.20.1-196.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/mc-forge.webp",
+      "gameType": "Minecraft",
+      "description": "[Purpur] Minecraft 1.21.8 Purpur",
+      "title": "Minecraft 1.21.8",
+      "category": "mc-purpur",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "55MB",
+      "remark": "Only Purpur included",
+      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.21.8-2481.jar",
+      "author": "purpurmc.org",
+      "setupInfo": {
+        "type": "minecraft/java/purpur",
+        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.21.8-2481.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "Linux",
+      "language": "en_us",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/mc-forge.webp",
+      "gameType": "Minecraft",
+      "description": "Forge 1.21.1 Server for Linux",
+      "title": "Forge 1.21.1 (Supports Mods)",
+      "category": "mc-forge",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "7MB",
+      "remark": "Minecraft Forge",
+      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.21.1-52.1.1/forge-1.21.1-52.1.1-installer.jar",
+      "author": "minecraftforge.net",
+      "setupInfo": {
+        "type": "minecraft/java/forge",
+        "startCommand": "sh ./run.sh",
+        "stopCommand": "stop",
+        "updateCommand": "java -jar forge-1.21.1-52.1.1-installer.jar --installServer",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "Windows",
+      "language": "en_us",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/mc-forge.webp",
+      "gameType": "Minecraft",
+      "description": "Forge 1.21.1 Server for Windows",
+      "title": "Forge 1.21.1 (Supports Mods)",
+      "category": "mc-forge",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "7MB",
+      "remark": "Minecraft Forge",
+      "targetLink": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.21.1-52.1.1/forge-1.21.1-52.1.1-installer.jar",
+      "author": "minecraftforge.net",
+      "setupInfo": {
+        "type": "minecraft/java/forge",
+        "startCommand": "start.bat",
+        "stopCommand": "stop",
+        "updateCommand": "java -jar forge-1.21.1-52.1.1-installer.jar --installServer",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "gameType": "Minecraft",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "description": "[Purpur] Minecraft 1.21.4 Purpur",
+      "title": "Minecraft 1.21.4",
+      "category": "mc-purpur",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "50MB",
+      "remark": "Only Purpur included",
+      "targetLink": "https://github.com/SkyKingPX/MCSManagerServerSoftware/releases/download/PurpurMC/purpur-1.21.4-2416.jar",
+      "author": "purpurmc.org",
+      "setupInfo": {
+        "type": "minecraft/java/purpur",
+        "startCommand": "java -Xms4096M -Xmx4096M -jar purpur-1.21.4-2416.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "gameType": "Minecraft",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "description": "[Paper] Minecraft 1.21.4 Paper",
+      "title": "Minecraft 1.21.4",
+      "category": "mc-paper",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "50MB",
+      "remark": "Only Paper included",
+      "targetLink": "https://api.papermc.io/v2/projects/paper/versions/1.21.4/builds/232/downloads/paper-1.21.4-232.jar",
+      "author": "papermc.io",
+      "setupInfo": {
+        "type": "minecraft/java/paper",
+        "startCommand": "java -Xms4096M -Xmx4096M -jar paper-1.21.4-232.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "gameType": "Minecraft",
+      "description": "[Vanilla] Minecraft 1.21.8",
+      "title": "Minecraft 1.21.8",
+      "category": "mc-vanilla",
+      "runtime": "Java 21+",
+      "hardware": "RAM 2G+",
+      "size": "55MB",
+      "remark": "Minecraft Java",
+      "targetLink": "https://piston-data.mojang.com/v1/objects/6bce4ef400e4efaa63a13d5e6f6b500be969ef81/server.jar",
+      "author": "Mojang Studios",
+      "setupInfo": {
+        "type": "minecraft/java",
+        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "gameType": "Minecraft",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "description": "[Vanilla] Minecraft 1.21.4",
+      "title": "Minecraft 1.21.4",
+      "category": "mc-vanilla",
+      "runtime": "Java 21+",
+      "hardware": "RAM 2G+",
+      "size": "55MB",
+      "remark": "Minecraft Java",
+      "targetLink": "https://piston-data.mojang.com/v1/objects/4707d00eb834b446575d89a61a11b5d548d8c001/server.jar",
+      "author": "Mojang Studios",
+      "setupInfo": {
+        "type": "minecraft/java",
+        "startCommand": "java -Xms2048M -Xmx2048M -jar server.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "gameType": "Minecraft",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "description": "Minecraft 1.21.4 with Fabric Loader",
+      "title": "Fabric 1.21.4 (Supports Mods)",
+      "category": "mc-fabric",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "5MB",
+      "remark": "Minecraft Fabric",
+      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.3/fabric-installer-1.0.3.jar",
+      "author": "fabricmc.net",
+      "setupInfo": {
+        "type": "minecraft/java/fabric",
+        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "java -jar fabric-installer-1.0.3.jar server -mcversion 1.21.4 -downloadMinecraft -noprofile",
+        "ie": "utf-8",
+        "oe": "utf-8"
+      }
+    },
+    {
+      "platform": "ALL",
+      "language": "en_us",
+      "image": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/package-images/minecraft.webp",
+      "gameType": "Minecraft",
+      "description": "Minecraft 1.21.8 with Fabric Loader",
+      "title": "Fabric 1.21.8 (Supports Mods)",
+      "category": "mc-fabric",
+      "runtime": "Java 21+",
+      "hardware": "RAM 8G+",
+      "size": "5MB",
+      "remark": "Minecraft Fabric",
+      "targetLink": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.3/fabric-installer-1.0.3.jar",
+      "author": "fabricmc.net",
+      "setupInfo": {
+        "type": "minecraft/java/fabric",
+        "startCommand": "java -Xms4096M -Xmx4096M -jar fabric-server-launch.jar nogui",
+        "stopCommand": "stop",
+        "updateCommand": "java -jar fabric-installer-1.0.3.jar server -mcversion 1.21.8 -downloadMinecraft -noprofile",
         "ie": "utf-8",
         "oe": "utf-8"
       }
