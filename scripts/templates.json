@@ -79,10 +79,12 @@
         "title": "DayZ Linux Server",
         "platform": "Linux",
         "hardware": "RAM 8G+",
+        "runtime": "Windows Server 2019+",
         "size": "10GB+",
         "remark": "DayZ server using SteamCMD",
         "targetLink": "https://raw.githubusercontent.com/Wil3on/mcp/refs/heads/main/scripts/Linux/dayz_linux.sh",
         "author": "Bohemia Interactive & Wil3on",
+        "tags": ["DayZ", "Dedicated", "Windows"],
         "setupInfo": {
           "tag": ["DayZ"],
           "type": "steam/universal",
