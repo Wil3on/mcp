@@ -1,0 +1,1 @@
+ArmaReforgerServer.exe -config .\\config.json -profile .\\profile -maxFPS 100 -freezeCheck 25 -freezeCheckMode kill -autoreload 30 -autoshutdown -logStats 60000 -logVoting -AILimit 120 -addonsVerify -addonsRepair -backendlog -nothrow -generateShaders
