@@ -10,20 +10,20 @@
 	"rcon": {
 		"address": "0.0.0.0",
 		"port": 19999,
-		"password": "SandMan504",
+		"password": "NotGoodPW",
 		"permission": "monitor",
 		"blacklist": [],
 		"whitelist": []
 	},
 	"game": {
-		"name": "Nordvik Demo",
+		"name": "MCSM Manager Reforger Server",
 		"password": "",
-		"passwordAdmin": "SandMan504",
+		"passwordAdmin": "NotGoodPW",
 		"admins" : [
 			"76561198200329058"
 		],
 		"scenarioId": "{ECC61978EDCC2B5A}Missions/23_Campaign.conf",
-		"maxPlayers": 32,
+		"maxPlayers": 110,
 		"visible": true,
 		"crossPlatform": true,
 		"supportedPlatforms": [
@@ -35,7 +35,7 @@
 			"serverMaxViewDistance": 2500,
 			"serverMinGrassDistance": 50,
 			"networkViewDistance": 1000,
-			"disableThirdPerson": true,
+			"disableThirdPerson": false,
 			"fastValidation": true,
 			"battlEye": true,
 			"VONDisableUI": false,
