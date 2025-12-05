@@ -28,7 +28,8 @@
 		"crossPlatform": true,
 		"supportedPlatforms": [
 			"PLATFORM_PC",
-			"PLATFORM_XBL"
+			"PLATFORM_XBL",
+			"PLATFORM_PSN"
 		],
 		"gameProperties": {
 			"serverMaxViewDistance": 2500,
@@ -37,8 +38,8 @@
 			"disableThirdPerson": true,
 			"fastValidation": true,
 			"battlEye": true,
-			"VONDisableUI": true,
-			"VONDisableDirectSpeechUI": true,
+			"VONDisableUI": false,
+			"VONDisableDirectSpeechUI": false,
 			"missionHeader": {
 				"m_iPlayerCount": 40,
 				"m_eEditableGameFlags": 6,
@@ -50,12 +51,17 @@
 	},
 	"operating": {
 		"lobbyPlayerSynchronise": true,
+		"disableCrashReporter": false,
+		"disableServerShutdown": false,
+		"disableAI": false,
+		"playerSaveTime": 120,
+		"aiLimit": -1,
+		"slotReservationTimeout": 60,
+		
+		
 		"joinQueue" : {
-			"maxSize" : 12
+			"maxSize" : 25
 		},
-		"disableNavmeshStreaming": [
-			"Soldiers",
-			"BTRlike"
-		]
+		"disableNavmeshStreaming": []
 	}
 }
